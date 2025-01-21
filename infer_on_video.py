@@ -7,6 +7,7 @@ import numpy as np
 import argparse
 from itertools import groupby
 from scipy.spatial import distance
+from config import MODEL_CONFIG
 
 def read_video(path_video):
     """ Read video file    
@@ -38,6 +39,8 @@ def infer_model(frames, model):
         ball_track: list of detected ball points
         dists: list of euclidean distances between two neighbouring ball points
     """
+    device = MODEL_CONFIG['device']
+    
     height = 360
     width = 640
     dists = [-1]*2
@@ -167,7 +170,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     model = BallTrackerNet()
-    device = 'cuda'
+    device = MODEL_CONFIG['device']
     model.load_state_dict(torch.load(args.model_path, map_location=device))
     model = model.to(device)
     model.eval()
